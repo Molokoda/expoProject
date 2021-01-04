@@ -1,24 +1,34 @@
 import React, { useState } from 'react';
 import { Button, StyleSheet, Text, View, TextInput} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import schema from '../scheme/registrationScheme'
 
-async function loginUser(log, pas, setShow){
+async function reg(log, pas){
+  let validate = await schema.validate({login: log, password: pas});
+  if(validate.error){
+    alert(validate.error);
+  }
+  else{
     let arrayOfData = await AsyncStorage.getItem('users');
     if(arrayOfData && log && pas){
         arrayOfData = JSON.parse(arrayOfData);
-        let user = arrayOfData.find( element => element.log === log && element.pas === pas);
+        let user = arrayOfData.find( element => element.log === log);
         if(user){
-          await AsyncStorage.setItem('isLogin', JSON.stringify(true));
-          setShow('welcomePage'); 
+            alert('User with such login already exist');
         }
         else{
-            alert('Login or password is not correct');
+            arrayOfData.push({log, pas});
+            await AsyncStorage.setItem('users', JSON.stringify(arrayOfData));
         }
     }
- 
+    else if(log && pas){
+        
+        await AsyncStorage.setItem('users', JSON.stringify([{log, pas}]));
+    }
+  } 
 }
 
-function LoginForm(props){
+function RegistrationForm(props){
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
     return(
@@ -27,7 +37,7 @@ function LoginForm(props){
         <TextInput  style = {styles.textInputStyle} onChange = {(e) => setLogin(e.target.value)}></TextInput>
         <Text style = {styles.textStyle} >Enter your password</Text>
         <TextInput style = {styles.textInputStyle} onChange = {(e) => setPassword(e.target.value)}></TextInput>
-        <Button title = 'login' onPress = {() =>  loginUser(login, password, props.setShow)}></Button>
+        <Button title = 'registration' onPress = {() =>  reg(login, password)}></Button>
         <Button title = 'back' onPress = {() =>  props.setShow('start')}></Button>
       </View>
     )
@@ -55,4 +65,4 @@ const styles = StyleSheet.create({
   });
 
 
-export default LoginForm;
+export default RegistrationForm;

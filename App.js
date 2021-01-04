@@ -1,10 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { Button, StyleSheet, Text, View, TextInput  } from 'react-native';
-import RegistrationForm from './registrationForm.js';
-import LoginForm from './loginForm.js';
+import RegistrationForm from './form/registrationForm.js';
+import LoginForm from './form/loginForm.js';
 import AsyncStorage from '@react-native-community/async-storage';
-import WeatherPage from './weatherPage.js'
+import WeatherPage from './components/weatherPage.js'
 
 export default function App() {
   const [show, setShow] = useState('start');
