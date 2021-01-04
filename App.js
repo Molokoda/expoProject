@@ -4,7 +4,7 @@ import { Button, StyleSheet, Text, View, TextInput  } from 'react-native';
 import RegistrationForm from './registrationForm.js';
 import LoginForm from './loginForm.js';
 import AsyncStorage from '@react-native-community/async-storage';
-
+import WeatherPage from './weatherPage.js'
 
 export default function App() {
   const [show, setShow] = useState('start');
@@ -37,16 +37,7 @@ export default function App() {
   }
   else if(show === 'welcomePage'){
     return(
-      <View style = {styles.container}>
-        <Text>Welcome</Text>
-        <Button title = 'logOut' onPress = {async() =>  
-          {
-            await AsyncStorage.setItem('isLogin', JSON.stringify(false));
-            setShow('start');
-          }
-          }>
-        </Button>
-      </View>
+      <WeatherPage setShow = {setShow}/>
     )
   }
 }
